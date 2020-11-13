@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
 } from 'react-bootstrap';
 import axios from 'axios';
+import EventList from './components/eventlist';
 
 const apiUri = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type';
 
@@ -19,7 +20,7 @@ class App extends React.Component {
   componentDidMount() {
     axios.get(apiUri).then((res) => {
       console.log(JSON.stringify(res));
-      this.setState({ response: res });
+      this.setState({ response: res.data });
     });
   }
 
@@ -28,9 +29,7 @@ class App extends React.Component {
 
     return (
       <div>
-        <ul>
-          <p>{JSON.stringify(response)}</p>
-        </ul>
+        {response.records && response.records.map((event) => <EventList event={event.fields} />)}
       </div>
     );
   }
