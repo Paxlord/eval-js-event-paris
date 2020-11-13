@@ -1,16 +1,15 @@
 import React from 'react';
 import {
-  Navbar, Form, Button, FormControl,
+  Navbar, Form, FormControl,
 } from 'react-bootstrap';
 
 const Navigation = ({ handleSearch }) => (
   <Navbar bg="light" expand="lg">
-    <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+    <Navbar.Brand href="#home">Eval Event Paris</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Form inline>
-        <FormControl type="text" placeholder="Search" className="mr-sm-2" onChange={(e) => handleSearch(e.target.value)} />
-        <Button variant="outline-success">Search</Button>
+        <FormControl type="text" placeholder="Recherchez un évenement" className="mr-sm-8" onChange={(e) => handleSearch(e.target.value)} />
       </Form>
     </Navbar.Collapse>
   </Navbar>

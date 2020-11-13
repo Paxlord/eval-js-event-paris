@@ -1,17 +1,24 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import {
+  Card, Button, Accordion, Row,
+} from 'react-bootstrap';
 
-const EventList = ({ event }) => (
-  <Card style={{ width: '35rem' }}>
-    <Card.Body>
-      <Card.Title>{event.title}</Card.Title>
-      <Card.Subtitle className="mb-2 text-muted">{event.date_start}</Card.Subtitle>
-      <Card.Text>
-        {event.description}
-      </Card.Text>
-      <Card.Link href={event.contact_url}>Contact</Card.Link>
-    </Card.Body>
-  </Card>
+const EventList = ({ event, index }) => (
+  <Row xs={12} style={{ margin: '1rem' }}>
+    <Card style={{ width: '100%' }}>
+      <Card.Header>
+        <Accordion.Toggle as={Button} variant="link" eventKey={`${index}`}>
+          <Card.Title>{event.title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+        </Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey={`${index}`}>
+        <Card.Body>
+          <div dangerouslySetInnerHTML={{ __html: event.description }} />
+        </Card.Body>
+      </Accordion.Collapse>
+    </Card>
+  </Row>
 );
 
 export default EventList;

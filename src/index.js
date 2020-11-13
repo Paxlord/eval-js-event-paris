@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
+import { Container, Accordion } from 'react-bootstrap';
 import axios from 'axios';
 import EventList from './components/eventlist';
 import Navigation from './components/navigation';
@@ -37,7 +37,12 @@ class App extends React.Component {
     return (
       <Container fluid>
         <Navigation handleSearch={this.handleSearch} />
-        {response.records && response.records.map((event) => <EventList event={event.fields} />)}
+        <Container>
+          <Accordion defaultActiveKey="0">
+            {response.records && response.records.map((event, index) => (
+              <EventList event={event.fields} index={index} key={event.recordid} />))}
+          </Accordion>
+        </Container>
       </Container>
     );
   }
