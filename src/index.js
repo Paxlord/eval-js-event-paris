@@ -49,7 +49,7 @@ class App extends React.Component {
   componentDidMount() {
     const { rows } = this.state;
 
-    GetEvents('', 0, rows).then((res) => { this.setState({ response: res, maxPages: res.nhits / rows }); });
+    GetEvents('', 0, rows).then((res) => { this.setState({ response: res, maxPages: Math.floor(res.nhits / rows) }); });
   }
 
   handleSearch(query) {
@@ -58,7 +58,11 @@ class App extends React.Component {
     GetEvents(query, start, rows)
       .then((res) => {
         this.setState({
-          response: res, start: 0, query, maxPages: res.nhits / rows, currentActivePage: 1,
+          response: res,
+          start: 0,
+          query,
+          maxPages: Math.floor(res.nhits / rows),
+          currentActivePage: 1,
         });
       });
   }
@@ -86,7 +90,10 @@ class App extends React.Component {
               <EventList event={event.fields} index={index} key={event.recordid} />))}
           </Accordion>
           <Pagination>
-            <Pagination.First />
+            <Pagination.First onClick={() => {
+              this.setState({ currentActivePage: 1 });
+            }}
+            />
             <Pagination.Prev onClick={() => {
               if (currentActivePage - 1 > 0) {
                 this.setState({ currentActivePage: currentActivePage - 1 });
@@ -111,7 +118,10 @@ class App extends React.Component {
               }
             }}
             />
-            <Pagination.Last />
+            <Pagination.Last onClick={() => {
+              this.setState({ currentActivePage: maxPages });
+            }}
+            />
           </Pagination>
         </Container>
       </Container>
