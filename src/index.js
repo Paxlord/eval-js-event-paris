@@ -87,7 +87,12 @@ class App extends React.Component {
           </Accordion>
           <Pagination>
             <Pagination.First />
-            <Pagination.Prev />
+            <Pagination.Prev onClick={() => {
+              if (currentActivePage - 1 > 0) {
+                this.setState({ currentActivePage: currentActivePage - 1 });
+              }
+            }}
+            />
             <Pagination.Ellipsis />
             {GenerateCurrentPaginationArray(currentActivePage, maxPages)
               .map((i) => (
@@ -100,7 +105,12 @@ class App extends React.Component {
                 </Pagination.Item>
               ))}
             <Pagination.Ellipsis />
-            <Pagination.Next />
+            <Pagination.Next onClick={() => {
+              if (currentActivePage + 1 <= maxPages) {
+                this.setState({ currentActivePage: currentActivePage + 1 });
+              }
+            }}
+            />
             <Pagination.Last />
           </Pagination>
         </Container>
