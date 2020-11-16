@@ -78,6 +78,29 @@ class App extends React.Component {
       });
   }
 
+  goToFirst() {
+    this.goToPage(1);
+  }
+
+  goToLast() {
+    const { maxPages } = this.state;
+    this.goToPage(maxPages);
+  }
+
+  goToNext() {
+    const { currentActivePage, maxPages } = this.state;
+    if (currentActivePage + 1 <= maxPages) {
+      this.goToPage(currentActivePage + 1);
+    }
+  }
+
+  goToPrev() {
+    const { currentActivePage } = this.state;
+    if (currentActivePage - 1 > 0) {
+      this.goToPage(currentActivePage - 1);
+    }
+  }
+
   render() {
     const { response, currentActivePage, maxPages } = this.state;
 
@@ -90,16 +113,8 @@ class App extends React.Component {
               <EventList event={event.fields} index={index} key={event.recordid} />))}
           </Accordion>
           <Pagination>
-            <Pagination.First onClick={() => {
-              this.setState({ currentActivePage: 1 });
-            }}
-            />
-            <Pagination.Prev onClick={() => {
-              if (currentActivePage - 1 > 0) {
-                this.setState({ currentActivePage: currentActivePage - 1 });
-              }
-            }}
-            />
+            <Pagination.First onClick={() => this.goToFirst()} />
+            <Pagination.Prev onClick={() => this.goToPrev()} />
             <Pagination.Ellipsis />
             {GenerateCurrentPaginationArray(currentActivePage, maxPages)
               .map((i) => (
@@ -112,16 +127,8 @@ class App extends React.Component {
                 </Pagination.Item>
               ))}
             <Pagination.Ellipsis />
-            <Pagination.Next onClick={() => {
-              if (currentActivePage + 1 <= maxPages) {
-                this.setState({ currentActivePage: currentActivePage + 1 });
-              }
-            }}
-            />
-            <Pagination.Last onClick={() => {
-              this.setState({ currentActivePage: maxPages });
-            }}
-            />
+            <Pagination.Next onClick={() => this.goToNext()} />
+            <Pagination.Last onClick={() => this.goToLast()} />
           </Pagination>
         </Container>
       </Container>
