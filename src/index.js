@@ -4,6 +4,7 @@ import './index.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Accordion, Pagination } from 'react-bootstrap';
 import axios from 'axios';
+
 import EventList from './components/eventlist';
 import Navigation from './components/navigation';
 
@@ -16,9 +17,7 @@ const GetEvents = (q, start, rows, filter = null) => {
   }
 
   return axios.get(apiUri, {
-    params: {
-      q, start, rows, ...refineObj,
-    },
+    params: Object.assign(refineObj, { q, start, rows }),
   })
     .then((res) => res.data);
 };
@@ -80,7 +79,7 @@ class App extends React.Component {
 
   handleDateFilter(date) {
     const { query, rows, refine } = this.state;
-    const refineWithDate = { ...refine, date_start: date };
+    const refineWithDate = Object.assign(refine, { date_start: date });
 
     GetEvents(query, 0, rows, refineWithDate)
       .then((res) => {
