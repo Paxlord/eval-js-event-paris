@@ -9,8 +9,19 @@ import Navigation from './components/navigation';
 
 const apiUri = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type';
 
-const GetEvents = (q, start, rows) => axios.get(apiUri, { params: { q, start, rows } })
-  .then((res) => res.data);
+const GetEvents = (q, start, rows, filter = null) => {
+  const refineObj = {};
+  if (filter) {
+    Object.keys(filter).forEach((key) => { refineObj[`refine.${key}`] = filter.key; });
+  }
+
+  return axios.get(apiUri, {
+    params: {
+      q, start, rows, ...refineObj,
+    },
+  })
+    .then((res) => res.data);
+};
 
 /* const GeneratePages = (nbMax, rows, goToPage) => {
   const pages = [];
@@ -36,30 +47,30 @@ class App extends React.Component {
     this.state = {
       response: [],
       rows: 10,
-      start: 0,
       query: '',
       currentActivePage: 1,
       maxPages: 1,
+      refine: {},
     };
 
     this.handleSearch = this.handleSearch.bind(this);
     this.goToPage = this.goToPage.bind(this);
+    this.handleDateFilter = this.handleDateFilter.bind(this);
   }
 
   componentDidMount() {
-    const { rows } = this.state;
+    const { rows, refine } = this.state;
 
-    GetEvents('', 0, rows).then((res) => { this.setState({ response: res, maxPages: Math.floor(res.nhits / rows) }); });
+    GetEvents('', 0, rows, refine).then((res) => { this.setState({ response: res, maxPages: Math.floor(res.nhits / rows) }); });
   }
 
   handleSearch(query) {
-    const { rows, start } = this.state;
+    const { rows, refine } = this.state;
 
-    GetEvents(query, start, rows)
+    GetEvents(query, 0, rows, refine)
       .then((res) => {
         this.setState({
           response: res,
-          start: 0,
           query,
           maxPages: Math.floor(res.nhits / rows),
           currentActivePage: 1,
@@ -67,13 +78,28 @@ class App extends React.Component {
       });
   }
 
-  goToPage(number) {
-    const { rows, query } = this.state;
+  handleDateFilter(date) {
+    const { query, rows, refine } = this.state;
+    const refineWithDate = { ...refine, date_start: date };
 
-    GetEvents(query, number * rows, rows)
+    GetEvents(query, 0, rows, refineWithDate)
       .then((res) => {
         this.setState({
-          response: res, start: number * rows, query, currentActivePage: number,
+          response: res,
+          maxPages: Math.floor(res.nhits / rows),
+          refine: refineWithDate,
+          currentActivePage: 1,
+        });
+      });
+  }
+
+  goToPage(number) {
+    const { rows, query, refine } = this.state;
+
+    GetEvents(query, number * rows, rows, refine)
+      .then((res) => {
+        this.setState({
+          response: res, query, currentActivePage: number,
         });
       });
   }
@@ -106,7 +132,7 @@ class App extends React.Component {
 
     return (
       <Container fluid>
-        <Navigation handleSearch={this.handleSearch} />
+        <Navigation handleSearch={this.handleSearch} handleDate={this.handleDateFilter} />
         <Container>
           <Accordion>
             {response.records && response.records.map((event, index) => (
