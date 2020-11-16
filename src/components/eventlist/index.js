@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Card, Button, Accordion, Row,
 } from 'react-bootstrap';
+import moment from 'moment';
 
 const EventList = ({ event, index }) => (
   <Row xs={12} style={{ margin: '1rem' }}>
@@ -9,7 +10,7 @@ const EventList = ({ event, index }) => (
       <Card.Header>
         <Accordion.Toggle as={Button} variant="link" eventKey={`${index}`}>
           <Card.Title>{event.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">{`Du ${moment(event.date_start).format('DD/MM/YYYY')} Au ${moment(event.date_end).format('DD/MM/YYYY')}`}</Card.Subtitle>
         </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey={`${index}`}>

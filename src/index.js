@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-datetime/css/react-datetime.css';
 import { Container, Accordion, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 
