@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import Datetime from 'react-datetime';
 
-const Navigation = ({ handleSearch }) => (
+const Navigation = ({ handleSearch, handleDate }) => (
   <Navbar bg="light" expand="lg">
     <Navbar.Brand href="#home">Eval Event Paris</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -12,7 +12,7 @@ const Navigation = ({ handleSearch }) => (
       <Form inline>
         <FormControl type="text" placeholder="Recherchez un évenement" className="mr-sm-8" onChange={(e) => handleSearch(e.target.value)} />
       </Form>
-      <Datetime timeFormat={false} />
+      <Datetime timeFormat={false} onChange={(date) => { console.log(date.format('YYYY-MM-DD')); handleDate(date.format('YYYY-MM-DD')); }} />
     </Navbar.Collapse>
   </Navbar>
 );

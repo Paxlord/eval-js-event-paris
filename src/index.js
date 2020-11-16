@@ -14,7 +14,7 @@ const apiUri = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-fa
 const GetEvents = (q, start, rows, filter = null) => {
   const refineObj = {};
   if (filter) {
-    Object.keys(filter).forEach((key) => { refineObj[`refine.${key}`] = filter.key; });
+    Object.keys(filter).forEach((key) => { refineObj[`refine.${key}`] = filter[key]; });
   }
 
   return axios.get(apiUri, {
@@ -80,6 +80,7 @@ class App extends React.Component {
 
   handleDateFilter(date) {
     const { query, rows, refine } = this.state;
+
     const refineWithDate = Object.assign(refine, { date_start: date });
 
     GetEvents(query, 0, rows, refineWithDate)
