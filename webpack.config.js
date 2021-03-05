@@ -21,7 +21,7 @@ module.exports = {
           {
             loader: 'eslint-loader',
             options: {
-              failOnError: true,
+              failOnError: false,
             },
           },
         ],
