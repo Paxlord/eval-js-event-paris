@@ -10,16 +10,37 @@ class App extends React.Component {
   
   constructor(props) {
     super(props);
+
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount(){
+    this.GetEvents();
+  }
+
+  GetEvents(param_q=''){
+    axios.get(apiUri, {
+      params:{
+        q: param_q
+      }
+    }).then((reponse) => { 
+      console.log(reponse);
+      this.setState({ data: reponse.data.records });
+     });
   }
 
   render() {
-
     return (
       <div>
-        test
+        <input onChange={(e) => this.GetEvents(e.target.value)} />
+        {this.state.data.map((event) => {
+          return <h1>{event.fields.title}</h1>
+        })}
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App data="data" />, document.getElementById('app'));
